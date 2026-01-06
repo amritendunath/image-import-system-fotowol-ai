@@ -19,7 +19,7 @@ A robust, scalable system for importing large volumes of images from Google Driv
 
 The system follows a microservices architecture designed for high throughput and reliability.
 
-```mermaid
+
 graph TD
     Client[Web Frontend (Vercel)] -->|HTTPS| Nginx[Nginx Reverse Proxy]
     Nginx -->|Proxy| API[API Gateway (FastAPI)]
