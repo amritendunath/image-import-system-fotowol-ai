@@ -76,7 +76,7 @@ The system is engineered to handle large-scale imports without blocking the user
 
 1.  **Clone the Repository**
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/amritendunath/image-import-system-fotowol-ai.git
     cd image_import_system
     ```
 
