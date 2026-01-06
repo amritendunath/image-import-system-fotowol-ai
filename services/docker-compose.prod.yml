@@ -1,0 +1,101 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: def-postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME:-imagedb}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - def-network
+    restart: always
+
+  # Redis for Celery
+  redis:
+    image: redis:7-alpine
+    container_name: def-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - def-network
+    restart: always
+
+  # API Gateway
+  api-gateway:
+    image: docer1st/api-gateway:latest
+    container_name: def-api-gateway
+    env_file:
+      - .env
+    expose:
+      - "5000"
+    environment:
+      - DB_HOST=postgres
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - def-network
+    restart: always
+
+  # Worker Service
+  worker-service:
+    image: docer1st/worker-service:latest
+    container_name: def-worker-service
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=postgres
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - def-network
+    restart: always
+    volumes:
+      - ./service-account.json:/app/service-account.json:ro
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: def-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/www/certbot:/var/www/certbot:ro
+    depends_on:
+      - api-gateway
+    networks:
+      - def-network
+    restart: always
+
+networks:
+  def-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

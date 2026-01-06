@@ -1,0 +1,38 @@
+:root {
+  /* Brand Colors */
+  --primary-color: #2563eb; /* Royal Blue */
+  --primary-hover: #1d4ed8;
+  --secondary-color: #64748b; /* Slate 500 */
+  --accent-color: #0f172a;   /* Slate 900 */
+  
+  /* Backgrounds */
+  --bg-body: #f1f5f9; /* Slate 100 */
+  --bg-surface: #ffffff;
+  --bg-sidebar: #0f172a; /* Dark sidebar */
+  
+  /* Text */
+  --text-main: #1e293b; /* Slate 800 */
+  --text-muted: #64748b;
+  --text-sidebar: #e2e8f0;
+  
+  /* Borders */
+  --border-color: #e2e8f0;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+}
